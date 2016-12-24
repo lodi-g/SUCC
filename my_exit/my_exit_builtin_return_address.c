@@ -1,3 +1,6 @@
+/*
+** Take in consideration that __builtin_return_address is a GCC built-in.
+*/
 #include <stdio.h>
 
 int main(int ac, const char* av[])

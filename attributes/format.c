@@ -1,13 +1,8 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include "attributes.h"
 
-// Enable warnings on wrong format string
-// Not necessarry if compiling with -Wformat or -Wall
 #pragma GCC diagnostic warning "-Wformat"
-
-// Declare a function as using a printf like format string
-// First argument is the format string, second arg is the first vararg
-#define __printf_attr(fidx, farg) __attribute__((format(printf, fidx, farg)))
 
 int __printf_attr(1, 2) xprintf(const char *fmt, ...)
 {

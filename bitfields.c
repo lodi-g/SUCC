@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-typedef struct __attribute__((packed)) type_s
+typedef struct type_s
 {
   unsigned int x : 1;
   unsigned int y : 4;

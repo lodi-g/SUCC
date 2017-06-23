@@ -1,6 +1,6 @@
 CC	:=	gcc
-CFLAGS	:=	-Wall -Wextra -g
+CFLAGS	:=	-Wall -Wextra -g -Iincs/
 
-string:	main.o string.o
+string:	main.o srcs/string.o
 	$(CC) $? -o $@
 	rm $?

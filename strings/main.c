@@ -3,8 +3,10 @@
 #include <ctype.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
-#include "string.h"
+#include "str.h"
 
 #define lambda(T, fn) ({ T lfn fn lfn; })
 
@@ -106,8 +108,18 @@ int main(void)
   validate("heap cons2", c, "st 1 2", 6);
   c->free(c);
 
-  c = str->cpy(str);
+  c = String(str->get(str));
   validate("copy", c, str->_value, str->_length);
+  c->free(c);
+
+  str->upper(str);
+  validate("lower", str, "TEST 1 2 3 VIVA ALGERIA", 23);
+
+  str->lower(str);
+  validate("lower", str, "test 1 2 3 viva algeria", 23);
+
+  c = String((char[]){str->at(str, 9), 0});
+  validate("at  ", c, "3", 1);
   c->free(c);
 
   str->free(str);

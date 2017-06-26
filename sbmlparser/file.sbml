@@ -2,7 +2,7 @@
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1" >
   <model name="Homo sapiens Glycolysis" id="Pathway146" >
     <listOfCompartments>
-      <compartment name="Homo sapiens, Cell, Cytosol" id="Cytosol"/>
+      <compartment name="Homo sapiens, Cell, Cytosol" id="Cyatosol"/>
     </listOfCompartments>
     <listOfSpecies>
       <species compartment="Cytosol" name="Adenosine diphosphate" id="Compound1034"/>

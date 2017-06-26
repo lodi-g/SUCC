@@ -1,8 +1,7 @@
 %{
 #include <stdio.h>
-
 #define YYSTYPE char*
-#include "grammar.tab.h"
+#include "parse.h"
 %}
 
 %option warn

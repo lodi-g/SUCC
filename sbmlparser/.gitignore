@@ -1,6 +1,7 @@
 *.yy.c
 y.*
 grammar.tab.*
+SBMLParser
 
 # Created by https://www.gitignore.io/api/emacs,c,linux
 

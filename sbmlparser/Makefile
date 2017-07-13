@@ -6,9 +6,9 @@ PFILE	:=	parse.c
 RM	:=	rm -f
 
 CC	:=	gcc
-CFLAGS	:=	-Wall -Wextra -Iincs/ -g3
+CFLAGS	:=	-Wall -Wextra
 
-SRCS	:=	main.c parser.c
+SRCS	:=	main.c
 SRCS	:=	$(addprefix srcs/, $(SRCS))
 
 OBJS	:=	$(patsubst %.c, %.o, $(SRCS))

@@ -2,109 +2,39 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-#include "incs/sbmlparser.h"
 
 #define YYSTYPE char*
-#define MPF
 
-int yyparse(void);
-int yylex(void);
-void yyerror(char const *msg);
-
-#define BEGINTAG "0"
-#define ENDTAG "1"
-#define ALONETAG "2"
-
-static t_node *curr = { 0 };
-
-int print_curr(char tag)
-{
-	if (tag == *ENDTAG)
-		return printf("</%s>\n", curr->name);
-
-	int i, j;
-	printf("<%s ", curr->name);
-	for (i = 0; curr->attrs[i]; i++)
-		{
-			printf("%s=\"", curr->attrs[i]->name);
-			for (j = 0; curr->attrs[i]->values[j]; j++);
-			while (j--)
-				{
-					printf("%s ", curr->attrs[i]->values[j]);
-				}
-			printf("\b\" ");
-		}
-	printf("\b%s", curr->attrs[0] ? "/>" : ">");
-	printf("\n");
-}
-
+int yylex();
+void yyerror(const char *msg);
 
 %}
-
-%define parse.error verbose
 
 %token XMLHEADER SBMLHEADER SBMLFOOTER OPENTAG CLOSETAG WORD DASH QUOTE EQUAL
 
 %%
 
 stmts: stmt | stmts stmt
-
 stmt: XMLHEADER | SBMLHEADER | SBMLFOOTER | xml_tag;
 
-xml_tag: begintag | endtag | alonetag;
+xml_tag: commontag { /* set_type(curr, *$1); add_to_root(curr); */ };
+commontag:
+		begintag { $$ = "0"; };
+	| endtag   { $$ = "1"; };
+	| alonetag { $$ = "2"; };
 
-begintag: OPENTAG tagname attributes CLOSETAG
-{
-	print_curr(*BEGINTAG);
-};
+begintag: OPENTAG tagname attributes CLOSETAG;
+endtag: OPENTAG DASH tagname CLOSETAG;
+alonetag: OPENTAG tagname attributes DASH CLOSETAG;
 
-endtag: OPENTAG DASH tagname CLOSETAG
-{
-	print_curr(*ENDTAG);
-};
+tagname: WORD {	/* curr = new_tag(curr, yylval); */ };
 
-alonetag: OPENTAG tagname attributes DASH CLOSETAG
-{
-	print_curr(*ALONETAG);
-};
-
-tagname: WORD
-{
-	curr = calloc(1, sizeof(t_node));
-	curr->name = strdup(yylval);
-	MPF("<%s", curr->name);
-}
-
-attributes: %empty | attributes attribute
-{
-	MPF("\b\"");
-};
-
+attributes: %empty | attributes attribute;
 attribute: attrname EQUAL attrvalue;
 
-attrname: WORD
-{
-	t_attrs **c = curr->attrs;
-	while (*c)
-		c++;
-	*c = calloc(1, sizeof(t_attrs));
-	(*c)->values = calloc(10, sizeof(char *));
-	(*c)->name = strdup(yylval);
-}
-
+attrname: WORD { /* new_attr(curr, yylval); */ };
 attrvalue: QUOTE words QUOTE;
-
-words: %empty | WORD words
-{
-	t_attrs **c = curr->attrs;
-	while (*c)
-		c++;
-	c--;
-	char **n = (*c)->values;
-	while (*n)
-		n++;
-	*n = strdup($1);
-};
+words: %empty | WORD words { /* new_attr_val(curr, yylval); */ };
 
 %%
 
